@@ -41,7 +41,10 @@ export default class ExpressServer {
 
     installValidator(app, this.routes)
       .then(() => {
-        http.createServer(app).listen(port, welcome(port));
+        // do not occupy port when in test mode
+        if (process.env.NODE_ENV !== 'test') {
+          http.createServer(app).listen(port, welcome(port));
+        }
       })
       .catch((e) => {
         l.error(e);

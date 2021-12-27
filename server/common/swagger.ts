@@ -45,7 +45,6 @@ export default function (
 
         routes(app);
 
-        // eslint-disable-next-line no-unused-vars, no-shadow
         app.use(errorHandler);
 
         resolve();
