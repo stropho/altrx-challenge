@@ -1,8 +1,10 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
+import { useTheme } from '@mui/material';
 
 const UserTableHeader = () => {
-  const colors = { bgcolor: 'darkblue', color: 'white' };
+  const theme = useTheme();
+  const colors = { bgcolor: theme.palette.primary.main, color: 'white' };
   return (
     <Grid container spacing={2} columns={19}>
       <Grid item xs={5} />
