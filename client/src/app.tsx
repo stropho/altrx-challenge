@@ -1,7 +1,8 @@
 import React from 'react';
+import UserManagement from './sections/user-management';
 
 const App = () => {
-  return <div>Hello World!!!</div>;
+  return <UserManagement />;
 };
 
 export default App;
