@@ -24,7 +24,7 @@ export class Controller {
   updateById(req: Request, res: Response): void {
     const id = req.params['id'];
     const { email, firstName, lastName, password } = req.body;
-    UserService.updateById(id, email, firstName, lastName, password).then(
+    UserService.updateById(id, firstName, lastName, email, password).then(
       (r) => {
         if (r) res.json(r);
         else res.status(404).end();

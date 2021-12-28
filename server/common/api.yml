@@ -40,6 +40,15 @@ definitions:
         type: string
         format: password
         example: password
+  UserFullBody:
+    allOf:
+      - $ref: "#/definitions/UserBody"
+      - type: object
+        required:
+          - id
+        properties:
+          id:
+            type: string
 
 paths:
   /user:
@@ -50,6 +59,12 @@ paths:
       responses:
         200:
           description: Returns all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/UserFullBody"
     post:
       tags:
         - Users
@@ -64,6 +79,10 @@ paths:
       responses:
         200:
           description: Returns the created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserFullBody"
   /user/{id}:
     get:
       tags:
@@ -73,10 +92,14 @@ paths:
           in: path
           required: true
           description: The id of the user to retrieve
-          type: integer
+          type: string
       responses:
         200:
           description: Return the user with the specified id
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserFullBody"
         404:
           description: User not found    
     put:
@@ -87,7 +110,7 @@ paths:
           in: path
           required: true
           description: The id of the user to update
-          type: integer
+          type: string
         - name: user
           in: body
           description: user attributes
@@ -97,6 +120,10 @@ paths:
       responses:
         200:
           description: Return the user with the specified id
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserFullBody"
         404:
           description: User not found        
     delete:
@@ -107,10 +134,14 @@ paths:
           in: path
           required: true
           description: The id of the user to retrieve
-          type: integer
+          type: string
       responses:
         200:
           description: Return true in case the user was successfully deleted, false otherwise
+          content:
+            application/json:
+              schema:
+                type: boolean
           
   /spec:
     get:
