@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFetchUserList } from '../../hooks/user-endpoints';
+import { UsersTable } from './table';
 
 const UserManagement = () => {
   const { data, isLoading } = useFetchUserList();
@@ -8,7 +9,7 @@ const UserManagement = () => {
 
   return (
     <div>
-      <pre>{JSON.stringify(data, null, '\t')}</pre>
+      <UsersTable data={data.data} />
     </div>
   );
 };
