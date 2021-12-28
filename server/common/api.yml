@@ -26,6 +26,29 @@ definitions:
       name:
         type: string
         example: no_stress
+  UserBody:
+    type: object
+    title: user
+    required:
+      - firstName
+      - lastName
+      - email
+      - password
+    properties:
+      firstName:
+        type: string
+        example: John
+      lastName:
+        type: string
+        example: Doe
+      email:
+        type: string
+        format: email
+        example: john.doe@foo.bar
+      password:
+        type: string
+        format: password
+        example: password
 
 paths:
   /examples:
@@ -66,7 +89,76 @@ paths:
           description: Return the example with the specified id
         404:
           description: Example not found
-
+  /user:
+    get:
+      tags:
+        - Users
+      description: Fetch all users
+      responses:
+        200:
+          description: Returns all users
+    post:
+      tags:
+        - Users
+      description: Create a new user
+      parameters:
+        - in: body
+          name: user
+          description: user attributes
+          required: true
+          schema: 
+            $ref: "#/definitions/UserBody"
+      responses:
+        200:
+          description: Returns the created user
+  /user/{id}:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          type: integer
+      responses:
+        200:
+          description: Return the user with the specified id
+        404:
+          description: User not found    
+    put:
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to update
+          type: integer
+        - name: user
+          in: body
+          description: user attributes
+          required: true
+          schema: 
+            $ref: "#/definitions/UserBody"
+      responses:
+        200:
+          description: Return the user with the specified id
+        404:
+          description: User not found        
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          type: integer
+      responses:
+        200:
+          description: Return true in case the user was successfully deleted, false otherwise
+          
   /spec:
     get:
       tags:
