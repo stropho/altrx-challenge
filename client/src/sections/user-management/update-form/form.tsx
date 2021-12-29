@@ -1,6 +1,9 @@
-import React, { forwardRef } from 'react';
-import { Button, Stack, TextField, Box, AppBar } from '@mui/material';
+import React, { forwardRef, useMemo } from 'react';
+import { Button, Stack, Box, AppBar, FormHelperText } from '@mui/material';
 import { UserFullBody } from '../../../generated/api';
+import { useForm } from 'react-hook-form';
+import { useUpdateUser } from '../../../hooks/user-endpoints';
+import FormTextField from '../../../components/form-text-field';
 
 const style = {
   position: 'absolute',
@@ -14,65 +17,78 @@ const style = {
   p: 4,
 } as const;
 
-const textFieldCommonProps = {
-  variant: 'filled',
-  size: 'small',
-} as const;
-
+type Props = UserFullBody & { onClose: () => void };
 const UpdateUserForm = ({
   firstName,
   lastName,
   email,
   password,
   id,
-}: UserFullBody) => {
+  onClose,
+}: Props) => {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<UserFullBody>();
+  const { mutate } = useUpdateUser();
+  const onSubmit = useMemo(() => {
+    return handleSubmit((data) => {
+      mutate({ ...data, id });
+      onClose();
+    });
+  }, [mutate, onClose, handleSubmit]);
+
   return (
-    <Box sx={style}>
-      <AppBar sx={{ textAlign: 'center' }}>
-        {firstName} {lastName}
-      </AppBar>
-      <Stack spacing={2}>
-        <input type="hidden" value={id} name="id" />
-        <span>First Name</span>
-        <TextField
-          {...textFieldCommonProps}
-          type="text"
-          name="firstName"
-          defaultValue={firstName}
-        />
-        <span>Last Name</span>
-        <TextField
-          {...textFieldCommonProps}
-          type="text"
-          name="lastName"
-          defaultValue={lastName}
-        />
-        <span>Email</span>
-        <TextField
-          {...textFieldCommonProps}
-          type="text"
-          name="email"
-          defaultValue={email}
-        />
-        <span>Password</span>
-        <TextField
-          {...textFieldCommonProps}
-          type="password"
-          name="password"
-          defaultValue={password}
-        />
-        <Stack spacing={2} justifyContent="space-between" direction="row">
-          <Button>Cancel</Button>
-          <Button color="primary" variant="contained">
-            Update
-          </Button>
+    <form onSubmit={onSubmit}>
+      <Box sx={style}>
+        <AppBar sx={{ textAlign: 'center' }}>
+          {firstName} {lastName}
+        </AppBar>
+        <Stack spacing={2}>
+          <span>First Name</span>
+          <FormTextField
+            control={control}
+            name="firstName"
+            defaultValue={firstName}
+          />
+          <span>Last Name</span>
+          <FormTextField
+            control={control}
+            type="text"
+            name="lastName"
+            defaultValue={lastName}
+          />
+          <span>Email</span>
+          <FormTextField
+            control={control}
+            type="text"
+            name="email"
+            defaultValue={email}
+          />
+          <span>Password</span>
+          <FormTextField
+            control={control}
+            type="password"
+            name="password"
+            defaultValue={password}
+          />
+          <Stack spacing={2} justifyContent="space-between" direction="row">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button color="primary" variant="contained" type="submit">
+              Update
+            </Button>
+          </Stack>
+          {Object.keys(errors).length > 0 && (
+            <FormHelperText error>The fields cannot be empty</FormHelperText>
+          )}
         </Stack>
-      </Stack>
-    </Box>
+      </Box>
+    </form>
   );
 };
 
-const WithRef = forwardRef((props: UserFullBody, _ref) => (
+const WithRef = forwardRef((props: Props, _ref) => (
   <UpdateUserForm {...props} />
 ));
 WithRef.displayName = 'UpdateUserFormWithRef';

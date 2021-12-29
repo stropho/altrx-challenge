@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import DeleteIcon from '@mui/icons-material/Close';
 import { Divider, Modal } from '@mui/material';
 import { UpdateUserForm } from '../update-form';
+import { useRemoveUser } from '../../../hooks/user-endpoints';
 
 const UserTableRow = ({
   firstName,
@@ -14,6 +15,8 @@ const UserTableRow = ({
 }: UserFullBody) => {
   const [isOpened, setOpened] = useState(false);
   const toggleOpened = useCallback(() => setOpened(!isOpened), [isOpened]);
+  const { mutate } = useRemoveUser();
+  const removeUser = useCallback(() => mutate(id), [id, mutate]);
 
   return (
     <Grid container spacing={2} columns={19}>
@@ -24,6 +27,7 @@ const UserTableRow = ({
           email={email}
           password={password}
           id={id}
+          onClose={toggleOpened}
         />
       </Modal>
       <Grid item xs={5} />
@@ -34,7 +38,7 @@ const UserTableRow = ({
         {email}
       </Grid>
       <Grid item xs={1}>
-        <DeleteIcon color="error" />
+        <DeleteIcon color="error" onClick={removeUser} />
       </Grid>
       <Grid item xs={5} />
 

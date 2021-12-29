@@ -11,14 +11,19 @@ function FormTextField<TFieldValues>({
   control,
   name,
   type = 'text',
-}: UseControllerProps<TFieldValues> & { type?: string; name: string }) {
+  defaultValue = '',
+}: UseControllerProps<TFieldValues> & {
+  defaultValue?: any;
+  name: string;
+  type?: string;
+}) {
   const {
     field: { onChange, onBlur, value, ref },
   } = useController<TFieldValues>({
     name,
     control,
     rules: { required: true },
-    defaultValue: '' as any,
+    defaultValue,
   });
 
   return (

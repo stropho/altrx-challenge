@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Api, UserBody, ContentType } from '../generated/api';
+import { Api, UserBody, ContentType, UserFullBody } from '../generated/api';
 
 enum QUERY_KEYS {
   USER_LIST = 'userList',
   USER_CREATE = 'userCreate',
+  USER_REMOVE = 'userDelete',
+  USER_UPDATE = 'userUpdate',
 }
 
 const api = new Api();
@@ -16,6 +18,30 @@ export const useCreateNewUser = () => {
 
   return useMutation(QUERY_KEYS.USER_CREATE, async (user: UserBody) => {
     const result = await api.user.userCreate(user, { type: ContentType.Json });
+    queryClient.invalidateQueries(QUERY_KEYS.USER_LIST);
+    return result;
+  });
+};
+export const useRemoveUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(QUERY_KEYS.USER_REMOVE, async (id: string) => {
+    const result = await api.user.userDelete(id, {
+      type: ContentType.Json,
+    });
+    queryClient.invalidateQueries(QUERY_KEYS.USER_LIST);
+    return result;
+  });
+};
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(QUERY_KEYS.USER_UPDATE, async (user: UserFullBody) => {
+    const { id, ...userBody } = user;
+
+    const result = await api.user.userUpdate(id, userBody, {
+      type: ContentType.Json,
+    });
     queryClient.invalidateQueries(QUERY_KEYS.USER_LIST);
     return result;
   });
