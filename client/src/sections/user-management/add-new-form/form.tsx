@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Grid from '@mui/material/Grid';
 import { Button, FormHelperText, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { UserBody } from '../../../generated/api';
 import FormTextField from '../../../components/form-text-field';
 import { useCreateNewUser } from '../../../hooks/user-endpoints';
+import { useSubmit } from '../../../hooks/form-feedback';
 
 const CreateUserForm = () => {
   const {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<UserBody>();
-  const { mutate } = useCreateNewUser();
+  const { mutateAsync } = useCreateNewUser();
 
+  const processFormData = useCallback(
+    async (data: UserBody) => {
+      reset();
+      return mutateAsync(data);
+    },
+    [mutateAsync, reset]
+  );
+  const { onSubmit, Snackbar } = useSubmit(
+    processFormData,
+    handleSubmit,
+    'User was created'
+  );
   return (
-    <form onSubmit={handleSubmit((data) => mutate(data))}>
+    <form onSubmit={onSubmit}>
+      {Snackbar}
       <Grid container spacing={2} columns={19}>
         <Grid item xs={5} />
         <Grid item xs={3}>

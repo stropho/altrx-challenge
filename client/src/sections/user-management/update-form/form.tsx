@@ -1,6 +1,13 @@
-import React, { forwardRef, useMemo } from 'react';
-import { Button, Stack, Box, AppBar, FormHelperText } from '@mui/material';
-import { UserFullBody } from '../../../generated/api';
+import React, { forwardRef, ReactNode, useCallback } from 'react';
+import {
+  Button,
+  Stack,
+  Box,
+  AppBar,
+  FormHelperText,
+  Alert,
+} from '@mui/material';
+import { UserBody, UserFullBody } from '../../../generated/api';
 import { useForm } from 'react-hook-form';
 import { useUpdateUser } from '../../../hooks/user-endpoints';
 import FormTextField from '../../../components/form-text-field';
@@ -17,7 +24,10 @@ const style = {
   p: 4,
 } as const;
 
-type Props = UserFullBody & { onClose: () => void };
+type Props = UserFullBody & {
+  onClose: () => void;
+  setNotificationMsg: (msg: ReactNode) => void;
+};
 const UpdateUserForm = ({
   firstName,
   lastName,
@@ -25,19 +35,23 @@ const UpdateUserForm = ({
   password,
   id,
   onClose,
+  setNotificationMsg,
 }: Props) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<UserFullBody>();
-  const { mutate } = useUpdateUser();
-  const onSubmit = useMemo(() => {
-    return handleSubmit((data) => {
-      mutate({ ...data, id });
+  } = useForm<UserBody>();
+  const { mutateAsync } = useUpdateUser();
+  const onSubmit = useCallback(
+    handleSubmit(async (data: UserBody) => {
+      const result = await mutateAsync({ ...data, id });
+      setNotificationMsg(<Alert severity="success">User was updated</Alert>);
       onClose();
-    });
-  }, [mutate, onClose, handleSubmit]);
+      return result;
+    }),
+    [mutateAsync, onClose, setNotificationMsg, handleSubmit]
+  );
 
   return (
     <form onSubmit={onSubmit}>
