@@ -12,6 +12,7 @@ tags:
 
 consumes:
   - application/json
+
 produces:
   - application/json
 
@@ -51,6 +52,26 @@ definitions:
             type: string
 
 paths:
+  /auth:
+    post:
+      consumes: 
+        - application/x-www-form-urlencoded
+      tags: 
+        - Authentication
+      description: Log in
+      parameters:
+        - name: email
+          in: formData
+          required: true
+          type: string
+        - name: password
+          in: formData
+          required: true
+          type: string 
+    get:
+      tags: 
+        - Authentication
+      description: Log out
   /user:
     get:
       tags:

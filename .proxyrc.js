@@ -5,5 +5,14 @@ module.exports = function (app) {
     createProxyMiddleware("/api", {
       target: "http://localhost:3000/",
     })
+  );  
+  app.use(
+    createProxyMiddleware(["/login", "/logout", '/api-explorer'], {
+      target: "http://localhost:3000/",
+      pathRewrite: {
+        '^/login': '/api/v1/auth',
+        '^/logout': '/api/v1/auth',
+      },
+    })
   );
 };

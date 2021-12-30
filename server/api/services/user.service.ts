@@ -38,6 +38,14 @@ export class usersService {
     L.info(`fetch user with id ${id}`);
     return this.all().then((r) => r.find((user) => user.id === id) || null);
   }
+  validateCredentials(email: string, password: string): Promise<string | null> {
+    L.info(`validate user with email ${email}`);
+    return this.all()
+      .then((r) =>
+        r.find((user) => user.email === email && user.password === password)
+      )
+      .then((user) => (user ? user.id : null));
+  }
 
   async removeById(id: string): Promise<boolean> {
     L.info(`remove user with id ${id}`);
