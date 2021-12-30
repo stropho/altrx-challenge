@@ -21,8 +21,15 @@ const UserTableRow = ({
   const { mutateAsync } = useRemoveUser();
 
   const removeUser = useCallback(async () => {
-    await mutateAsync(id);
-    setNotificationMsg(<Alert severity="success">User was removed</Alert>);
+    const wasRemoved = (await mutateAsync(id)).data;
+
+    setNotificationMsg(
+      wasRemoved ? (
+        <Alert severity="success">User was removed</Alert>
+      ) : (
+        <Alert severity="error">Something went wrong</Alert>
+      )
+    );
   }, [id, mutateAsync, setNotificationMsg]);
 
   return (

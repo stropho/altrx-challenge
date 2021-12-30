@@ -1,5 +1,6 @@
 import UserService from '../../services/user.service';
 import { Request, Response } from 'express';
+import { AUTH_COOKIE_NAME } from '../../../common/constants';
 
 export class Controller {
   all(_: Request, res: Response): void {
@@ -16,7 +17,8 @@ export class Controller {
 
   removeById(req: Request, res: Response): void {
     const id = req.params['id'];
-    UserService.removeById(id).then((r) => {
+    const currentUserId = req.cookies[AUTH_COOKIE_NAME];
+    UserService.removeById(id, currentUserId).then((r) => {
       res.json(r);
     });
   }

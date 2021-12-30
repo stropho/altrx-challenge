@@ -47,8 +47,9 @@ export class usersService {
       .then((user) => (user ? user.id : null));
   }
 
-  async removeById(id: string): Promise<boolean> {
+  async removeById(id: string, currentUserId: string): Promise<boolean> {
     L.info(`remove user with id ${id}`);
+    if (id === currentUserId) return false;
     const users = await this.all();
     const userIndex = users.findIndex((user) => user.id === id);
     if (userIndex < 0) return false;
