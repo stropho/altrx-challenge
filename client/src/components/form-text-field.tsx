@@ -2,7 +2,7 @@ import React from 'react';
 import { TextField } from '@mui/material';
 import { useController, UseControllerProps } from 'react-hook-form';
 
-const textFieldCommonProps = {
+export const textFieldCommonProps = {
   variant: 'filled',
   size: 'small',
 } as const;
