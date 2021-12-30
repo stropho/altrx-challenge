@@ -8,7 +8,9 @@ export class Controller {
   }
 
   byId(req: Request, res: Response): void {
-    const id = req.params['id'];
+    const requestedId = req.params['id'];
+    const id =
+      requestedId === 'whoami' ? req.cookies[AUTH_COOKIE_NAME] : requestedId;
     UserService.byId(id).then((r) => {
       if (r) res.json(r);
       else res.status(404).end();

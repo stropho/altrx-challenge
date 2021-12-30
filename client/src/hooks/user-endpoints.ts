@@ -2,10 +2,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Api, UserBody, ContentType, UserFullBody } from '../generated/api';
 
 enum QUERY_KEYS {
-  USER_LIST = 'userList',
   USER_CREATE = 'userCreate',
+  USER_LIST = 'userList',
   USER_REMOVE = 'userDelete',
   USER_UPDATE = 'userUpdate',
+  USER_WHOAMI = 'whoami',
 }
 
 const api = new Api();
@@ -46,3 +47,6 @@ export const useUpdateUser = () => {
     return result;
   });
 };
+
+export const useWhoami = () =>
+  useQuery(QUERY_KEYS.USER_WHOAMI, () => api.user.userDetail('whoami'));
