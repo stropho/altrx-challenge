@@ -1,7 +1,5 @@
 # fullstack-challenge
 
--
-
 ## Quick Start
 
 Get started developing...
@@ -10,88 +8,43 @@ Get started developing...
 # install deps
 npm install
 
-# run in development mode
-npm run dev
+# get .env
+cp .env-example .env
 
-# run tests
+# run in development mode - port 1234
+npm run dev
+```
+Now, you can access the app on `localhost:1234`.
+The log in credentials are:
+- email: `master.admin@foo.bar`
+- password: `admin`
+
+Or run the tests
+```shell
 npm run test
 ```
-
 ---
 
-## How do I modify the example API and make it my own?
+## More info
+### Backend 
+  - set up using yoman `generator-express-no-stress-typescript`
+  - `swagger` is available on `localhost:1234/api-explorer`
+    - note that you have to log-in in order to use the user endpoints
+  - the `swagger schema` is defined in `server/common/api.yml`
+  - TS types based on the schema are located in `client/src/generated/api.ts`
+  - Database is not present. User info including password in plain text is stored in memory
+  - user is "authenticated" and provided with a cookie. No session, no hashes....
+  - a user cannot delete himself
 
-There are two key files:
-1. `server/routes.ts` - This references the implementation of all of your routes. Add as many routes as you like and point each route your express handler functions.
-2. `server/common/api.yaml` - This file contains your [OpenAPI spec](https://swagger.io/specification/). Describe your API here. It's recommended that you to declare any and all validation logic in this YAML. `express-no-stress-typescript`  uses [express-openapi-validator](https://github.com/cdimascio/express-openapi-validator) to automatically handle all API validation based on what you've defined in the spec.
+### Frontend 
+  - uses `parceljs` 
+  - `mui` ui library
+    - there is a mixup with imports because of IDE autocomplete functionality. It looks ugly because the imports are not consistent - sometimes imported from a specific file (default export), sometimes as "named export"
+  - `react-query` for data fetching and management
+    - no other "global state" management has been implemented
+  - `react-hook-form` for easier forms management
 
-## Install Dependencies
+### Missing parts
+ - sign-up page + endpoint - did not seem important for this example task
+ - test coverage - except "create user functionality" as defined in the task specification
 
-Install all package dependencies (one time operation)
-
-```shell
-npm install
-```
-
-## Run It
-#### Run in *development* mode:
-Runs the application is development mode. Should not be used in production
-
-```shell
-npm run dev
-```
-
-or debug it
-
-```shell
-npm run dev:debug
-```
-
-#### Run in *production* mode:
-
-Compiles the application and starts it in production production mode.
-
-```shell
-npm run compile
-npm start
-```
-
-## Test It
-
-Run the Mocha unit tests
-
-```shell
-npm test
-```
-
-or debug them
-
-```shell
-npm run test:debug
-```
-
-## Try It
-* Open your browser to [http://localhost:3000](http://localhost:3000)
-* Invoke the `/examples` endpoint 
-  ```shell
-  curl http://localhost:3000/api/v1/examples
-  ```
-
-
-## Debug It
-
-#### Debug the server:
-
-```
-npm run dev:debug
-```
-
-#### Debug Tests
-
-```
-npm run test:debug
-```
-
-#### Debug with VSCode
-
-Add these [contents](https://github.com/cdimascio/generator-express-no-stress/blob/next/assets/.vscode/launch.json) to your `.vscode/launch.json` file

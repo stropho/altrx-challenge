@@ -1,4 +1,4 @@
-import 'mocha';
+import { describe, it } from 'mocha';
 import { expect } from 'chai';
 import request from 'supertest';
 import Server from '../server';
