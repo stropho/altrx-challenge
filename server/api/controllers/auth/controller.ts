@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import UserService from '../../services/user.service';
 import L from '../../../common/logger';
+import { AUTH_COOKIE_NAME } from '../../../common/constants';
 
-const AUTH_COOKIE_NAME = 'token-cookie';
 export class Controller {
   logout(_: Request, res: Response): void {
     L.info(`Log out`);
